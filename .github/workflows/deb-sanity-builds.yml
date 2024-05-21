@@ -41,7 +41,7 @@ jobs:
       fail-fast: false
       matrix:
         recipe:
-        - checkbox-provider-pc-sanity-edge
+        - checkbox-contrib-pc-sanity-edge
     steps:
       - name: Install dependencies
         run: |
