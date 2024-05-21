@@ -9,7 +9,8 @@ on:
 jobs:
   ppa_update:
     name: Sync PPA history with monorepo
-    runs-on: [self-hosted, linux, jammy, large]
+    #runs-on: [self-hosted, linux, jammy, large]
+    runs-on: ubuntu-22.04
     timeout-minutes: 1200 #20h, this will timeout sooner due to inner timeouts
     steps:
       - name: Install dependencies
@@ -29,10 +30,11 @@ jobs:
           attempt_delay: 6000 # 1 min
           attempt_limit: 60   # max 1 hour of retries
           command: |
-            tools/release/lp_request_import.py "~checkbox-dev/checkbox/+git/checkbox"
+            tools/release/lp_request_import.py "~dirksu/dirk-test/+git/checkbox"
   ppa_build:
     name: Trigger and monitor PPA builds
-    runs-on: [self-hosted, linux, jammy, large]
+    #runs-on: [self-hosted, linux, jammy, large]
+    runs-on: ubuntu-22.04
     needs: ppa_update
     timeout-minutes: 1200 #20h, this will timeout sooner due to inner timeouts
     strategy:
@@ -58,7 +60,7 @@ jobs:
           attempt_delay: 6000 # 1 min
           attempt_limit: 60   # max 1 hour of retries
           command: |
-            tools/release/lp_update_recipe_sanity.py checkbox --recipe ${{ matrix.recipe }} --new-version $(tools/release/get_version.py --dev-suffix --output-format deb) --revision $GITHUB_SHA
+            tools/release/lp_update_recipe.py dirk-test --recipe ${{ matrix.recipe }} --new-version $(tools/release/get_version.py --dev-suffix --output-format deb) --revision $GITHUB_SHA
       - uses: Wandalen/wretry.action/main@v3.4.0_js_action
         name: Build and wait result
         timeout-minutes: 780 # 13hours
@@ -69,4 +71,4 @@ jobs:
           attempt_delay: 60000 # 10min
           attempt_limit: 3
           command: |
-            tools/release/lp_build_monitor_recipe.py checkbox ${{ matrix.recipe }}
+            tools/release/lp_build_monitor_recipe.py dirk-test ${{ matrix.recipe }}

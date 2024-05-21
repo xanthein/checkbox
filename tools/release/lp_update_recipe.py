@@ -50,9 +50,9 @@ def get_updated_build_recipe(
     new_recipe = textwrap.dedent(
         f"""
         # git-build-recipe format 0.4 deb-version {version}
-        lp:~checkbox-dev/checkbox/+git/support empty
-        nest-part packaging lp:~checkbox-dev/checkbox {target_path}/debian debian {revision}
-        nest-part monorepo lp:~checkbox-dev/checkbox {target_path} {target_path} {revision}
+        lp:~dirksu/dirk-test/+git/support empty
+        nest-part packaging lp:~dirksu/dirk-test/+git/checkbox  {target_path}/debian debian {revision}
+        nest-part monorepo lp:~dirksu/dirk-test/+git/checkbox  {target_path} {target_path} {revision}
         """
     ).strip()
     return new_recipe
